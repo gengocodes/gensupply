@@ -97,6 +97,11 @@ app.get("/", verifyUser, (req, res) => {
   return res.json({ Status: "Correct Password!", name: req.name });
 });
 
+app.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  return res.json({ Status: "Logged out!" });
+});
+
 app.listen(1234, () => {
   console.log("Server running...");
 });
