@@ -9,7 +9,13 @@ import "dotenv/config";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 const crypt = 5;
 
@@ -50,6 +56,11 @@ app.post("/login", (req, res) => {
                 "Password does not match! Error in comparing the password.",
             });
           if (response) {
+            const name = data[0].name;
+            const token = jwt.sign({ name }, process.env.JWT_TOKEN, {
+              expiresIn: "10s",
+            });
+            res.cookie("token", token);
             return res.json({ Status: "Correct Password!" });
           } else {
             return res.json({ Error: "Wrong Password!" });
@@ -60,6 +71,30 @@ app.post("/login", (req, res) => {
       return res.json({ Error: "Unregistered Email!" });
     }
   });
+});
+
+const verifyUser = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.json({
+      Error: "You are not authenticated!",
+    });
+  } else {
+    jwt.verify(token, process.env.JWT_TOKEN, (err, decoded) => {
+      if (err) {
+        return res.json({
+          Error: "Incorrect token!",
+        });
+      } else {
+        req.name = decoded.name;
+        next();
+      }
+    });
+  }
+};
+
+app.get("/", verifyUser, (req, res) => {
+  return res.json({ Status: "Correct Password!", name: req.name });
 });
 
 app.listen(1234, () => {

@@ -4,6 +4,7 @@ import axios from "axios";
 
 function Login() {
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -14,7 +15,7 @@ function Login() {
       .post("http://localhost:1234/login", values)
       .then((res) => {
         if (res.data.Status === "Correct Password!") {
-          navigate("/");
+          navigate("/home");
         } else {
           alert(res.data.Error);
         }
