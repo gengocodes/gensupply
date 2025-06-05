@@ -30,11 +30,38 @@ app.post("/register", (req, res) => {
         return res.json({
           Error: "Error in inserting the data to the server.",
         });
-      return res.json({ Status: "Inserted Data" });
+      return res.json({ Status: "Registration Success!" });
     });
   });
 });
 
+app.post("/login", (req, res) => {
+  const sql = "SELECT * FROM users WHERE email = ?";
+  db.query(sql, [req.body.email], (err, data) => {
+    if (err) return res.json({ Error: "Server Login Error!" });
+    if (data.length > 0) {
+      bcrypt.compare(
+        req.body.password.toString(),
+        data[0].password,
+        (err, response) => {
+          if (err)
+            return res.json({
+              Error:
+                "Password does not match! Error in comparing the password.",
+            });
+          if (response) {
+            return res.json({ Status: "Correct Password!" });
+          } else {
+            return res.json({ Error: "Wrong Password!" });
+          }
+        }
+      );
+    } else {
+      return res.json({ Error: "Unregistered Email!" });
+    }
+  });
+});
+
 app.listen(1234, () => {
-  console.log("Running. ..");
+  console.log("Server running...");
 });
