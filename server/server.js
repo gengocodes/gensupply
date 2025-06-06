@@ -1,7 +1,6 @@
 import express from "express"; //server side
 import mysql from "mysql"; //database
 import cors from "cors"; //access backend api using frontend
-import nodemon from "nodemon"; //auto refresh server side
 import cookieParser from "cookie-parser"; //cookies
 import jwt from "jsonwebtoken"; //authentication(security)
 import bcrypt from "bcrypt"; //hash pwds
@@ -40,11 +39,14 @@ app.post("/register", (req, res) => {
     });
   });
 });
-
+app.post("/updatename", (req, res) => {
+  console.log("Username received:", req.body.username);
+  return res.json({ Status: "Username Updated!" });
+});
 app.post("/login", (req, res) => {
   const sql = "SELECT * FROM users WHERE email = ?";
   db.query(sql, [req.body.email], (err, data) => {
-    if (err) return res.json({ Error: "Server Login Error!" });
+    if (err) return res.json({ Error: "Database not initialized!" });
     if (data.length > 0) {
       bcrypt.compare(
         req.body.password.toString(),
@@ -58,10 +60,10 @@ app.post("/login", (req, res) => {
           if (response) {
             const name = data[0].name;
             const token = jwt.sign({ name }, process.env.JWT_TOKEN, {
-              expiresIn: "10s",
+              expiresIn: "60s",
             });
             res.cookie("token", token);
-            return res.json({ Status: "Correct Password!" });
+            return res.json({ Status: "User Authenticated!" });
           } else {
             return res.json({ Error: "Wrong Password!" });
           }
@@ -94,7 +96,7 @@ const verifyUser = (req, res, next) => {
 };
 
 app.get("/", verifyUser, (req, res) => {
-  return res.json({ Status: "Correct Password!", name: req.name });
+  return res.json({ Status: "User Authenticated!", name: req.name });
 });
 
 app.get("/logout", (req, res) => {

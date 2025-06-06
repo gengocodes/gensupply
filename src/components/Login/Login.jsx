@@ -14,7 +14,7 @@ function Login() {
     axios
       .post("http://localhost:1234/login", values)
       .then((res) => {
-        if (res.data.Status === "Correct Password!") {
+        if (res.data.Status === "User Authenticated!") {
           navigate("/home");
         } else {
           alert(res.data.Error);

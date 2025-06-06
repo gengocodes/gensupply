@@ -13,7 +13,7 @@ function Home() {
     axios
       .get("http://localhost:1234")
       .then((res) => {
-        if (res.data.Status === "Correct Password!") {
+        if (res.data.Status === "User Authenticated!") {
           setAuth(true);
           setName(res.data.name);
         } else {
@@ -25,6 +25,10 @@ function Home() {
       .then((err) => console.log(err));
   }, [auth, message, navigate]);
 
+  const [username, setUsername] = useState({
+    username: "",
+  });
+
   const handleLogout = () => {
     axios
       .get("http://localhost:1234/logout")
@@ -35,13 +39,40 @@ function Home() {
       })
       .catch((err) => console.log(err));
   };
+
+  const handleUpdateName = (event) => {
+    event.preventDefault();
+    axios
+      .post("http://localhost:1234/updatename", username)
+      .then((res) => {
+        if (res.data.Status === "Username Updated!") {
+          console.log(username);
+        } else {
+          alert(res.data.Error);
+        }
+      })
+      .then((err) => console.log(err));
+  };
   return (
     <div className="home-main">
+      <h1>Home Page</h1>
       <div>
         <h3>You are Authorized, {name}</h3>
         <button className="logout" onClick={handleLogout}>
           Logout
         </button>
+        <form onSubmit={handleUpdateName}>
+          <label htmlFor="username">Change Username</label>
+          <input
+            type="text"
+            name="username"
+            required
+            onChange={(e) =>
+              setUsername({ ...username, username: e.target.value })
+            }
+          />
+          <button type="submit">Submit</button>
+        </form>
       </div>
     </div>
   );
