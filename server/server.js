@@ -4,6 +4,7 @@ import cors from "cors"; //access backend api using frontend
 import cookieParser from "cookie-parser"; //cookies
 import jwt from "jsonwebtoken"; //authentication(security)
 import bcrypt from "bcrypt"; //hash pwds
+const PORT = 1234;
 import "dotenv/config";
 
 const app = express();
@@ -60,7 +61,7 @@ app.post("/login", (req, res) => {
           if (response) {
             const name = data[0].name;
             const token = jwt.sign({ name }, process.env.JWT_TOKEN, {
-              expiresIn: "60s",
+              expiresIn: "10m",
             });
             res.cookie("token", token);
             return res.json({ Status: "User Authenticated!" });
@@ -104,6 +105,6 @@ app.get("/logout", (req, res) => {
   return res.json({ Status: "Logged out!" });
 });
 
-app.listen(1234, () => {
-  console.log("Server running...");
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { decrement, increment } from "../../slices/counterSlice.tsx";
 
 function Home() {
   const [auth, setAuth] = useState(false);
@@ -53,6 +55,11 @@ function Home() {
       })
       .then((err) => console.log(err));
   };
+
+  const dispatch = useDispatch();
+  const count = useSelector((state) => state.count.counter);
+  const [newCount, setNewCount] = useState();
+
   return (
     <div className="home-main">
       <h1>Home Page</h1>
@@ -61,6 +68,9 @@ function Home() {
         <button className="logout" onClick={handleLogout}>
           Logout
         </button>
+        Count: {count}{" "}
+        <button onClick={() => dispatch(increment())}>Increment</button>
+        <button onClick={() => dispatch(decrement())}>Decrement</button>
         <form onSubmit={handleUpdateName}>
           <label htmlFor="username">Change Username</label>
           <input
