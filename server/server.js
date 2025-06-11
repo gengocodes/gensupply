@@ -36,19 +36,28 @@ const db = mysql.createConnection({
 });
 
 app.post("/register", (req, res) => {
-  const sql = "INSERT INTO users (`name`,`email`,`password`) VALUES (?)";
-  bcrypt.hash(req.body.password.toString(), crypt, (err, hash) => {
-    if (err) return res.json({ Error: "Error for hashing password" });
-    const values = [req.body.name, req.body.email, hash];
-    db.query(sql, [values], (err, result) => {
-      if (err)
-        return res.json({
-          Error: "Error in inserting the data to the server.",
-        });
-      return res.json({ Status: "Registration Success!" });
+  const checkSql = "SELECT * FROM users WHERE email = ?";
+  db.query(checkSql, [req.body.email], (err, data) => {
+    if (err) return res.json({ Error: "Database error checking email." });
+    if (data.length > 0) {
+      return res.json({ Error: "Email already in use." });
+    }
+
+    const sql = "INSERT INTO users (`name`, `email`, `password`) VALUES (?)";
+    bcrypt.hash(req.body.password.toString(), crypt, (err, hash) => {
+      if (err) return res.json({ Error: "Error hashing password." });
+
+      const values = [req.body.name, req.body.email, hash];
+      db.query(sql, [values], (err, result) => {
+        if (err) {
+          return res.json({ Error: "Error inserting data to the server." });
+        }
+        return res.json({ Status: "Registration Success!" });
+      });
     });
   });
 });
+
 app.post("/updatename", (req, res) => {
   const username = req.body.username;
   const email = req.session.user?.email;
@@ -68,10 +77,18 @@ app.post("/updatename", (req, res) => {
       name: username,
       email: req.session.user.email,
     };
+    req.session.user = newUser;
+
     const newToken = jwt.sign(newUser, process.env.JWT_TOKEN, {
       expiresIn: "10m",
     });
     res.cookie("token", newToken);
+    const tokenExpiry = new Date(Date.now() + 10 * 60 * 1000);
+    console.log(
+      `🔐 Token refreshed for ${
+        newUser.name
+      } will expire at: ${tokenExpiry.toLocaleString()}`
+    );
     return res.json({ Status: "Username Updated!" });
   });
 });
@@ -100,6 +117,12 @@ app.post("/login", (req, res) => {
               expiresIn: "10m",
             });
             res.cookie("token", token);
+            const tokenExpiry = new Date(Date.now() + 10 * 60 * 1000);
+            console.log(
+              `🔐 Token created for ${
+                user.name
+              } will expire at: ${tokenExpiry.toLocaleString()}`
+            );
             return res.json({ Status: "User Authenticated!" });
           } else {
             return res.json({ Error: "Wrong Password!" });

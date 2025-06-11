@@ -16,8 +16,10 @@ function Register() {
       .then((res) => {
         if (res.data.Status === "Registration Success!") {
           navigate("/login");
+        } else if (res.data.Error) {
+          alert(res.data.Error);
         } else {
-          alert("Error!");
+          alert("Something went wrong with the request.");
         }
       })
       .then((err) => console.log(err));
