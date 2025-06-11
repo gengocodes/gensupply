@@ -3,21 +3,37 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment } from "../../slices/counterSlice.tsx";
+import {
+  setUser,
+  updateUsername,
+  logoutUser,
+} from "../../slices/userSlice.tsx";
 
 function Home() {
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState("");
-  const [name, setName] = useState("");
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
+
+  const dispatch = useDispatch();
+  const count = useSelector((state) => state.count.counter);
+
+  const name = useSelector((state) => state.user.name);
+  const email = useSelector((state) => state.user.email);
+  const id = useSelector((state) => state.user.id);
 
   useEffect(() => {
     axios
       .get("http://localhost:1234")
       .then((res) => {
         if (res.data.Status === "User Authenticated!") {
-          setAuth(true);
-          setName(res.data.name);
+          dispatch(
+            setUser({
+              name: res.data.user.name,
+              email: res.data.user.email,
+              id: res.data.user.id,
+            })
+          );
         } else {
           setAuth(false);
           setMessage(res.data.Error);
@@ -27,15 +43,14 @@ function Home() {
       .then((err) => console.log(err));
   }, [auth, message, navigate]);
 
-  const [username, setUsername] = useState({
-    username: "",
-  });
+  const [username, setUsername] = useState("");
 
   const handleLogout = () => {
     axios
       .get("http://localhost:1234/logout")
       .then((res) => {
         if (res.data.Status === "Logged out!") {
+          dispatch(logoutUser());
           navigate("/");
         }
       })
@@ -45,10 +60,10 @@ function Home() {
   const handleUpdateName = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:1234/updatename", username)
+      .post("http://localhost:1234/updatename", { username })
       .then((res) => {
         if (res.data.Status === "Username Updated!") {
-          console.log(username);
+          dispatch(updateUsername(username));
         } else {
           alert(res.data.Error);
         }
@@ -56,15 +71,14 @@ function Home() {
       .then((err) => console.log(err));
   };
 
-  const dispatch = useDispatch();
-  const count = useSelector((state) => state.count.counter);
-  const [newCount, setNewCount] = useState();
-
   return (
     <div className="home-main">
       <h1>Home Page</h1>
       <div>
-        <h3>You are Authorized, {name}</h3>
+        <h3>
+          You are Authorized, {name}, Email: {email}, ID:
+          {id}
+        </h3>
         <button className="logout" onClick={handleLogout}>
           Logout
         </button>
@@ -77,9 +91,7 @@ function Home() {
             type="text"
             name="username"
             required
-            onChange={(e) =>
-              setUsername({ ...username, username: e.target.value })
-            }
+            onChange={(e) => setUsername(e.target.value)}
           />
           <button type="submit">Submit</button>
         </form>
