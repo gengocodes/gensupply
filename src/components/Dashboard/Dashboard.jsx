@@ -11,6 +11,12 @@ function Dashboard() {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentEdit, setCurrentEdit] = useState({
+    id: null,
+    name: "",
+    count: 0,
+  });
 
   const navHome = () => {
     navigate("/home");
@@ -59,12 +65,16 @@ function Dashboard() {
       })
       .catch((err) => console.log(err));
   };
-  const handleUpdate = (id, updatedSupply) => {
+  const handleUpdate = () => {
     axios
-      .put(`http://localhost:1234/supply/update/${id}`, updatedSupply)
+      .put(`http://localhost:1234/supply/update/${currentEdit.id}`, {
+        name: currentEdit.name,
+        count: currentEdit.count,
+      })
       .then((res) => {
         if (res.data.Status === "Supply Updated!") {
           fetchSupplies();
+          setIsModalOpen(false);
         } else {
           alert(res.data.Error);
         }
@@ -81,6 +91,12 @@ function Dashboard() {
       })
       .catch((err) => console.log(err));
   };
+
+  const openEditModal = (supply) => {
+    setCurrentEdit(supply);
+    setIsModalOpen(true);
+  };
+
   return (
     <div>
       <h2>Supplies</h2>
@@ -105,24 +121,53 @@ function Dashboard() {
         />
         <button type="submit">Create</button>
       </form>
+
       {supplies.map((supply) => (
         <div key={supply.id}>
           <p>
             {supply.name}(id {supply.id})(Count: {supply.count})
           </p>
           <button onClick={() => handleDelete(supply.id)}>Delete</button>
-          <button
-            onClick={() =>
-              handleUpdate(supply.id, {
-                name: prompt("New name:", supply.name),
-                count: parseInt(prompt("New count:", supply.count)),
-              })
-            }
-          >
-            Edit
-          </button>
+          <button onClick={() => openEditModal(supply)}>Edit</button>
         </div>
       ))}
+      {isModalOpen && (
+        <div className="edit-modal-cont">
+          <div className="edit-modal">
+            <h3>Edit Supply</h3>
+            <label>Name</label>
+            <input
+              type="text"
+              value={currentEdit.name}
+              onChange={(e) =>
+                setCurrentEdit({ ...currentEdit, name: e.target.value })
+              }
+              required
+            />
+            <label>Count</label>
+            <input
+              type="number"
+              value={currentEdit.count}
+              onChange={(e) =>
+                setCurrentEdit({
+                  ...currentEdit,
+                  count: parseInt(e.target.value),
+                })
+              }
+              required
+            />
+            <div style={{ marginTop: "1rem" }}>
+              <button onClick={handleUpdate}>Save</button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                style={{ marginLeft: "1rem" }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <button onClick={navHome}>Home</button>
     </div>
   );
