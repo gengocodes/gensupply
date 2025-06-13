@@ -155,6 +155,15 @@ const verifyUser = (req, res, next) => {
   }
 };
 
+app.get("/supply", verifyUser, (req, res) => {
+  const userId = req.user.id;
+  const sql = "SELECT * FROM supplies WHERE user_id = ?";
+  db.query(sql, [userId], (err, result) => {
+    if (err) return res.json({ Error: "Failed to fetch supplies" });
+    return res.json(result);
+  });
+});
+
 app.get("/", verifyUser, (req, res) => {
   return res.json({ Status: "User Authenticated!", user: req.user });
 });

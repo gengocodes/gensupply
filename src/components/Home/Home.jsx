@@ -41,7 +41,7 @@ function Home() {
         }
       })
       .then((err) => console.log(err));
-  }, [auth, message, navigate]);
+  }, [auth, message, navigate, dispatch]);
 
   const [username, setUsername] = useState("");
 
@@ -70,6 +70,9 @@ function Home() {
       })
       .then((err) => console.log(err));
   };
+  const navigateDashboard = () => {
+    navigate("/dashboard");
+  };
 
   return (
     <div className="home-main">
@@ -95,6 +98,7 @@ function Home() {
           />
           <button type="submit">Submit</button>
         </form>
+        <button onClick={navigateDashboard}>Dashboard</button>
       </div>
     </div>
   );
