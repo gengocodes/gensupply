@@ -1,22 +1,26 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../slices/userSlice.tsx";
+import { setNewSupply, clearSupply } from "../../slices/supplySlice.tsx";
+import "./Dashboard.css";
 
 function Dashboard() {
   const [auth, setAuth] = useState(false);
   const [supplies, setSupplies] = useState([]);
-  const [newSupply, setNewSupply] = useState({ name: "", count: 0 });
-  axios.defaults.withCredentials = true;
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentEdit, setCurrentEdit] = useState({
     id: null,
     name: "",
     count: 0,
   });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  axios.defaults.withCredentials = true;
+
+  const newSupply = useSelector((state) => state.supply);
 
   const navHome = () => {
     navigate("/home");
@@ -84,10 +88,13 @@ function Dashboard() {
 
   const createSupply = () => {
     axios
-      .post("http://localhost:1234/supply/create", newSupply)
+      .post("http://localhost:1234/supply/create", {
+        name: newSupply.name,
+        count: newSupply.count,
+      })
       .then(() => {
         fetchSupplies();
-        setNewSupply({ name: "", count: 0 });
+        dispatch(setNewSupply(clearSupply()));
       })
       .catch((err) => console.log(err));
   };
@@ -96,6 +103,10 @@ function Dashboard() {
     setCurrentEdit(supply);
     setIsModalOpen(true);
   };
+
+  const filteredSupplies = supplies.filter((supply) =>
+    supply.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div>
@@ -107,7 +118,10 @@ function Dashboard() {
           name="supplyName"
           placeholder="Input Supply Name"
           required
-          onChange={(e) => setNewSupply({ ...newSupply, name: e.target.value })}
+          value={newSupply.name}
+          onChange={(e) =>
+            dispatch(setNewSupply({ ...newSupply, name: e.target.value }))
+          }
         />
         <label htmlFor="supplyCount">Supply Count</label>
         <input
@@ -115,22 +129,34 @@ function Dashboard() {
           name="supplyCount"
           placeholder="Input Supply Count"
           required
+          value={newSupply.count}
           onChange={(e) =>
-            setNewSupply({ ...newSupply, count: e.target.value })
+            dispatch(
+              setNewSupply({ ...newSupply, count: parseInt(e.target.value) })
+            )
           }
         />
         <button type="submit">Create</button>
       </form>
-
-      {supplies.map((supply) => (
-        <div key={supply.id}>
-          <p>
-            {supply.name}(id {supply.id})(Count: {supply.count})
-          </p>
-          <button onClick={() => handleDelete(supply.id)}>Delete</button>
-          <button onClick={() => openEditModal(supply)}>Edit</button>
-        </div>
-      ))}
+      <input
+        type="text"
+        placeholder="Search Supples..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      {filteredSupplies.length === 0 ? (
+        <p>No supply found!</p>
+      ) : (
+        filteredSupplies.map((supply, index) => (
+          <div key={supply.id} className="supply-cont">
+            <p>
+              {supply.name}(id {index + 1})(Count: {supply.count})
+            </p>
+            <button onClick={() => handleDelete(supply.id)}>Delete</button>
+            <button onClick={() => openEditModal(supply)}>Edit</button>
+          </div>
+        ))
+      )}
       {isModalOpen && (
         <div className="edit-modal-cont">
           <div className="edit-modal">
@@ -156,14 +182,9 @@ function Dashboard() {
               }
               required
             />
-            <div style={{ marginTop: "1rem" }}>
+            <div className="modal-buttons">
               <button onClick={handleUpdate}>Save</button>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                style={{ marginLeft: "1rem" }}
-              >
-                Cancel
-              </button>
+              <button onClick={() => setIsModalOpen(false)}>Cancel</button>
             </div>
           </div>
         </div>
