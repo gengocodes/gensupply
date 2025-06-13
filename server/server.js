@@ -163,6 +163,15 @@ app.get("/supply", verifyUser, (req, res) => {
     return res.json(result);
   });
 });
+app.post("/supply/create", verifyUser, (req, res) => {
+  const { name, count } = req.body;
+  const userId = req.user.id;
+  const sql = "INSERT INTO supplies (user_id, name, count) VALUES (?, ?, ?)";
+  db.query(sql, [userId, name, count], (err, result) => {
+    if (err) return res.json({ Error: "Failed to create supply" });
+    return res.json({ Status: "Supply Created!" });
+  });
+});
 app.put("/supply/update/:id", verifyUser, (req, res) => {
   const { name, count, id } = req.body;
   const userId = req.user.id;

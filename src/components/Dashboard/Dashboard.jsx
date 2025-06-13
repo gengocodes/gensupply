@@ -11,6 +11,7 @@ function Dashboard() {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const navHome = () => {
     navigate("/home");
   };
@@ -49,21 +50,50 @@ function Dashboard() {
   const handleUpdate = (id, updatedSupply) => {
     axios
       .put(`http://localhost:1234/supply/update/${id}`, updatedSupply)
-      .then(() => fetchSupplies(), console.log(id, updatedSupply))
+      .then((res) => {
+        console.log("Response: ", res.data);
+        if (res.data.Status === "Supply Updated!") {
+          fetchSupplies();
+        } else {
+          alert(res.data.Error);
+        }
+      })
       .catch((err) => console.log(err));
   };
 
-  const inputRef = useRef();
-  const handleSubmit = () => {
-    const inputValue = inputRef.current.value;
-    setNewSupply({ name: inputValue });
+  const createSupply = () => {
+    axios
+      .post("http://localhost:1234/supply/create", newSupply)
+      .then(() => {
+        fetchSupplies();
+        setNewSupply({ name: "", count: 0 });
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <div>
       <h2>Supplies</h2>
-      <input ref={inputRef} />
-      <button onClick={handleSubmit}>Submit</button>
-      {newSupply.name}
+      <form className="new-supply-form" onSubmit={createSupply}>
+        <label htmlFor="supplyName">Supply Name</label>
+        <input
+          type="text"
+          name="supplyName"
+          placeholder="Input Supply Name"
+          required
+          onChange={(e) => setNewSupply({ ...newSupply, name: e.target.value })}
+        />
+        <label htmlFor="supplyCount">Supply Count</label>
+        <input
+          type="number"
+          name="supplyCount"
+          placeholder="Input Supply Count"
+          required
+          onChange={(e) =>
+            setNewSupply({ ...newSupply, count: e.target.value })
+          }
+        />
+        <button type="submit">Create</button>
+      </form>
       {supplies.map((supply) => (
         <div key={supply.id}>
           <p>
