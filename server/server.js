@@ -21,7 +21,7 @@ app.use(
 app.use(
   cors({
     origin: ["http://localhost:3000"],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -161,6 +161,17 @@ app.get("/supply", verifyUser, (req, res) => {
   db.query(sql, [userId], (err, result) => {
     if (err) return res.json({ Error: "Failed to fetch supplies" });
     return res.json(result);
+  });
+});
+app.put("/supply/update/:id", verifyUser, (req, res) => {
+  const { name, count, id } = req.body;
+  const userId = req.user.id;
+  const sql =
+    "UPDATE supplies SET name = ?, count = ? WHERE id = ? AND user_id = ?";
+  db.query(sql, [name, count, id, userId], (err, result) => {
+    if (err) return res.json({ Error: "Failed to update supply" });
+
+    return res.json({ Status: "Supply Updated!" });
   });
 });
 

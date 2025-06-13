@@ -11,7 +11,6 @@ import {
 
 function Home() {
   const [auth, setAuth] = useState(false);
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
@@ -36,12 +35,11 @@ function Home() {
           );
         } else {
           setAuth(false);
-          setMessage(res.data.Error);
           navigate("/");
         }
       })
       .then((err) => console.log(err));
-  }, [auth, message, navigate, dispatch]);
+  }, [auth, navigate, dispatch]);
 
   const [username, setUsername] = useState("");
 
