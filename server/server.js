@@ -173,11 +173,12 @@ app.post("/supply/create", verifyUser, (req, res) => {
   });
 });
 app.put("/supply/update/:id", verifyUser, (req, res) => {
-  const { name, count, id } = req.body;
+  const { name, count } = req.body;
   const userId = req.user.id;
+  const supplyId = req.params.id;
   const sql =
     "UPDATE supplies SET name = ?, count = ? WHERE id = ? AND user_id = ?";
-  db.query(sql, [name, count, id, userId], (err, result) => {
+  db.query(sql, [name, count, supplyId, userId], (err, result) => {
     if (err) return res.json({ Error: "Failed to update supply" });
 
     return res.json({ Status: "Supply Updated!" });
