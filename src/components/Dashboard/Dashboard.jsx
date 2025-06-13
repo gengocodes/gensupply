@@ -47,11 +47,22 @@ function Dashboard() {
       .catch((err) => console.log(err));
   };
 
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:1234/supply/delete/${id}`)
+      .then((res) => {
+        if (res.data.Status === "Supply Deleted!") {
+          fetchSupplies();
+        } else {
+          alert(res.data.Error);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   const handleUpdate = (id, updatedSupply) => {
     axios
       .put(`http://localhost:1234/supply/update/${id}`, updatedSupply)
       .then((res) => {
-        console.log("Response: ", res.data);
         if (res.data.Status === "Supply Updated!") {
           fetchSupplies();
         } else {
@@ -99,6 +110,7 @@ function Dashboard() {
           <p>
             {supply.name}(id {supply.id})(Count: {supply.count})
           </p>
+          <button onClick={() => handleDelete(supply.id)}>Delete</button>
           <button
             onClick={() =>
               handleUpdate(supply.id, {

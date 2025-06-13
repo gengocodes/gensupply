@@ -145,7 +145,7 @@ const verifyUser = (req, res, next) => {
     jwt.verify(token, process.env.JWT_TOKEN, (err, decoded) => {
       if (err) {
         return res.json({
-          Error: "Incorrect token!",
+          Error: "Session timed out!",
         });
       } else {
         req.user = decoded;
@@ -170,6 +170,15 @@ app.post("/supply/create", verifyUser, (req, res) => {
   db.query(sql, [userId, name, count], (err, result) => {
     if (err) return res.json({ Error: "Failed to create supply" });
     return res.json({ Status: "Supply Created!" });
+  });
+});
+app.delete("/supply/delete/:id", verifyUser, (req, res) => {
+  const userId = req.user.id;
+  const supplyId = req.params.id;
+  const sql = "DELETE FROM supplies WHERE id = ? AND user_id = ?";
+  db.query(sql, [supplyId, userId], (err, result) => {
+    if (err) return res.json({ Error: "Failed to delete supply" });
+    return res.json({ Status: "Supply Deleted!" });
   });
 });
 app.put("/supply/update/:id", verifyUser, (req, res) => {
