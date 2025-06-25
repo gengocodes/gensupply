@@ -117,12 +117,6 @@ app.post("/login", (req, res) => {
               expiresIn: "10m",
             });
             res.cookie("token", token);
-            const tokenExpiry = new Date(Date.now() + 10 * 60 * 1000);
-            console.log(
-              `🔐 Token created for ${
-                user.name
-              } will expire at: ${tokenExpiry.toLocaleString()}`
-            );
             return res.json({ Status: "User Authenticated!" });
           } else {
             return res.json({ Error: "Wrong Password!" });
