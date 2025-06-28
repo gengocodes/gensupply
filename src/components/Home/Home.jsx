@@ -8,7 +8,7 @@ import {
   updateUsername,
   logoutUser,
 } from "../../slices/userSlice.tsx";
-const api = process.env.BCK_HOST || "http://localhost:1234";
+const api = process.env.REACT_APP_BACK_HOST || "http://localhost:1234";
 
 function Home() {
   const [auth, setAuth] = useState(false);
