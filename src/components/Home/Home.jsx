@@ -24,7 +24,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get(`${api}`)
+      .get(`${api}`, { withCredentials: true })
       .then((res) => {
         if (res.data.Status === "User Authenticated!") {
           dispatch(
