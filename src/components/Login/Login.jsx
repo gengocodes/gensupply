@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-const api = process.env.REACT_APP_API_URL || "http://localhost:1234";
+const api = process.env.BCK_HOST || "http://localhost:1234";
 
 function Login() {
   const navigate = useNavigate();
