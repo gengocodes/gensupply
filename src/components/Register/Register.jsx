@@ -16,6 +16,7 @@ function Register() {
       .post(`${api}/register`, values)
       .then((res) => {
         if (res.data.Status === "Registration Success!") {
+          console.log("Response from backend:", res.data);
           navigate("/login");
         } else if (res.data.Error) {
           alert(res.data.Error);
