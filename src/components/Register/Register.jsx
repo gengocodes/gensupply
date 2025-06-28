@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+const api = process.env.REACT_APP_API_URL || "http://localhost:1234";
 
 function Register() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:1234/register", values)
+      .post(`${api}/register`, values)
       .then((res) => {
         if (res.data.Status === "Registration Success!") {
           navigate("/login");

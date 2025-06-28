@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../slices/userSlice.tsx";
 import { setNewSupply, clearSupply } from "../../slices/supplySlice.tsx";
 import "./Dashboard.css";
+const api = process.env.REACT_APP_API_URL || "http://localhost:1234";
 
 function Dashboard() {
   const [auth, setAuth] = useState(false);
@@ -28,7 +29,7 @@ function Dashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:1234")
+      .get(`${api}`)
       .then((res) => {
         if (res.data.Status === "User Authenticated!") {
           dispatch(
@@ -52,14 +53,14 @@ function Dashboard() {
 
   const fetchSupplies = () => {
     axios
-      .get("http://localhost:1234/supply")
+      .get(`${api}/supply`)
       .then((res) => setSupplies(res.data))
       .catch((err) => console.log(err));
   };
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:1234/supply/delete/${id}`)
+      .delete(`${api}/supply/delete/${id}`)
       .then((res) => {
         if (res.data.Status === "Supply Deleted!") {
           fetchSupplies();
@@ -71,7 +72,7 @@ function Dashboard() {
   };
   const handleUpdate = () => {
     axios
-      .put(`http://localhost:1234/supply/update/${currentEdit.id}`, {
+      .put(`${api}/supply/update/${currentEdit.id}`, {
         name: currentEdit.name,
         count: currentEdit.count,
       })
@@ -88,7 +89,7 @@ function Dashboard() {
 
   const createSupply = () => {
     axios
-      .post("http://localhost:1234/supply/create", {
+      .post(`${api}/supply/create`, {
         name: newSupply.name,
         count: newSupply.count,
       })

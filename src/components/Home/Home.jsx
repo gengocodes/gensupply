@@ -8,6 +8,7 @@ import {
   updateUsername,
   logoutUser,
 } from "../../slices/userSlice.tsx";
+const api = process.env.REACT_APP_API_URL || "http://localhost:1234";
 
 function Home() {
   const [auth, setAuth] = useState(false);
@@ -23,7 +24,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:1234")
+      .get(`${api}`)
       .then((res) => {
         if (res.data.Status === "User Authenticated!") {
           dispatch(
@@ -45,7 +46,7 @@ function Home() {
 
   const handleLogout = () => {
     axios
-      .get("http://localhost:1234/logout")
+      .get(`${api}/logout`)
       .then((res) => {
         if (res.data.Status === "Logged out!") {
           dispatch(logoutUser());
@@ -58,7 +59,7 @@ function Home() {
   const handleUpdateName = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:1234/updatename", { username })
+      .post(`${api}/updatename`, { username })
       .then((res) => {
         if (res.data.Status === "Username Updated!") {
           dispatch(updateUsername(username));

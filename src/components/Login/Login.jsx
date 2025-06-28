@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+const api = process.env.REACT_APP_API_URL || "http://localhost:1234";
 
 function Login() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:1234/login", values)
+      .post(`${api}`, values)
       .then((res) => {
         if (res.data.Status === "User Authenticated!") {
           navigate("/home");
