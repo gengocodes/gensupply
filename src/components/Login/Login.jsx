@@ -13,7 +13,7 @@ function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post(`${api}`, values)
+      .post(`${api}/login`, values)
       .then((res) => {
         if (res.data.Status === "User Authenticated!") {
           navigate("/home");

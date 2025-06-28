@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 const api = process.env.REACT_APP_BACK_HOST || "http://localhost:10000";
-
+console.log("API endpoint:", api);
 function Register() {
   const navigate = useNavigate();
   const [values, setValues] = useState({
