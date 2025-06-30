@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "../../slices/userSlice.tsx";
-import { setNewSupply, clearSupply } from "../../slices/supplySlice.tsx";
-import "./Dashboard.css";
+import { setUser } from "../slices/userSlice.tsx";
+import { setNewSupply, clearSupply } from "../slices/supplySlice.tsx";
+import "../styles/Dashboard.css";
 const api = process.env.REACT_APP_BACK_HOST || "http://localhost:10000";
 
 function Dashboard() {

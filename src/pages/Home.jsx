@@ -2,12 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { decrement, increment } from "../../slices/counterSlice.tsx";
-import {
-  setUser,
-  updateUsername,
-  logoutUser,
-} from "../../slices/userSlice.tsx";
+import { decrement, increment } from "../slices/counterSlice.tsx";
+import { setUser, updateUsername, logoutUser } from "../slices/userSlice.tsx";
 const api = process.env.REACT_APP_BACK_HOST || "http://localhost:10000";
 
 function Home() {
