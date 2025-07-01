@@ -13,8 +13,8 @@ function Header() {
     setHamburgerClicked(!hamburgerClicked);
   };
   return (
-    <header className="w-screen h-[80px] fixed flex flex-row border-b-zinc-300 border-b border-solid">
-      {hamburgerClicked === false ? (
+    <header className="w-screen h-[80px] bg-slate-50 fixed flex flex-row border-b-zinc-300 border-b border-solid">
+      {hamburgerClicked === true ? (
         <nav className="absolute mt-[80px] h-screen w-screen flex bg-red-50 flex-col items-center">
           <div className="h-[60%] w-screen items-center flex flex-col">
             <div className="border-y-zinc-400 border-b border-solid w-[90%] pt-3 pb-3 flex group">
@@ -84,7 +84,7 @@ function Header() {
             </a>
             <a
               href="/login"
-              className="no-underline text-[1.2rem] text-red-700 pl-10 pr-10 pt-2 pb-2 font-semibold w-[90%] flex justify-center ml-[10px] mt-4 border-[1px] rounded-[10px] border-solid border-red-700 hover:bg-red-700 hover:text-red-50"
+              className="no-underline text-[1.2rem] text-red-700 pl-10 pr-10 pt-2 pb-2 font-semibold w-[90%] flex justify-center ml-[10px] mt-4 border-[1px] rounded-[10px] border-solid border-red-700 hover:bg-zinc-200 "
             >
               Log In
             </a>
@@ -94,7 +94,7 @@ function Header() {
         <></>
       )}
       <div className="flex w-[50%] items-center justify-start ">
-        {screenWidth > 600 ? (
+        {screenWidth > 820 ? (
           <>
             <img
               src={logo}
@@ -133,7 +133,7 @@ function Header() {
         )}
       </div>
       <div className="flex w-[50%] items-center justify-end">
-        {screenWidth > 600 ? (
+        {screenWidth > 820 ? (
           <>
             <a
               href="/demo"
@@ -159,7 +159,7 @@ function Header() {
             {hamburgerClicked === true ? (
               <>
                 {" "}
-                <MenuIcon
+                <CloseIcon
                   onClick={handleHamburgerClick}
                   fontSize="large"
                   className="mr-[30px]"
@@ -167,7 +167,7 @@ function Header() {
               </>
             ) : (
               <>
-                <CloseIcon
+                <MenuIcon
                   onClick={handleHamburgerClick}
                   fontSize="large"
                   className="mr-[30px]"
