@@ -4,6 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { NavigationHooks } from "../hooks/NavigationHooks";
 import { useEffectHooks } from "../hooks/useEffectHooks";
+import mockup from "../assets/mockup.jpg";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../components/Header";
@@ -19,11 +20,23 @@ function LandingPage() {
   return (
     <>
       <Header />
-      <div className="pt-[120px]">test</div>
-      <main className="container" style={{ backgroundColor: "whitesmoke" }}>
-        {" "}
-        containerasdasd
-      </main>
+      <div className="pt-[80px]"></div>
+      {screenWidth > 900 ? (
+        <>
+          <section className="h-screen w-full flex flex-row">
+            <div className="w-[70%] h-screen bg-red-500"> </div>
+            <div className="w-[30%] h-screen bg-slate-50 flex items-center">
+              {" "}
+              <img
+                src={mockup}
+                className="absolute h-[30vw] w-[50vw] right-0 mr-5 border-[5px] border-solid border-slate-50"
+              />
+            </div>
+          </section>
+        </>
+      ) : (
+        <></>
+      )}
     </>
     // <div className="landingpage-container">
     //   <div className="landing-header">

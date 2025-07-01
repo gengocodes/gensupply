@@ -22,7 +22,7 @@ function Header() {
                 {" "}
                 <a
                   href="#home"
-                  className="no-underline text-[1.5rem] text-zinc-800 font-semibold group-hover:text-red-700 ml-[10px]"
+                  className="no-underline text-[1.3rem] text-zinc-800 font-semibold group-hover:text-red-700 ml-[10px]"
                 >
                   Home
                 </a>
@@ -36,7 +36,7 @@ function Header() {
                 {" "}
                 <a
                   href="#about"
-                  className="no-underline text-[1.5rem] text-zinc-800 font-semibold group-hover:text-red-700 ml-[10px]"
+                  className="no-underline text-[1.3rem] text-zinc-800 font-semibold group-hover:text-red-700 ml-[10px]"
                 >
                   About
                 </a>
@@ -51,7 +51,7 @@ function Header() {
                 {" "}
                 <a
                   href="#pricing"
-                  className="no-underline text-[1.5rem] text-zinc-800 font-semibold group-hover:text-red-700 ml-[10px]"
+                  className="no-underline text-[1.3rem] text-zinc-800 font-semibold group-hover:text-red-700 ml-[10px]"
                 >
                   Pricing
                 </a>
@@ -65,7 +65,7 @@ function Header() {
                 {" "}
                 <a
                   href="#demo"
-                  className="no-underline text-[1.5rem] text-zinc-800 font-semibold group-hover:text-red-700 ml-[10px]"
+                  className="no-underline text-[1.3rem] text-zinc-800 font-semibold group-hover:text-red-700 ml-[10px]"
                 >
                   Demo
                 </a>
@@ -94,7 +94,7 @@ function Header() {
         <></>
       )}
       <div className="flex w-[50%] items-center justify-start ">
-        {screenWidth > 820 ? (
+        {screenWidth > 900 ? (
           <>
             <img
               src={logo}
@@ -104,19 +104,19 @@ function Header() {
             <nav>
               <a
                 href="#home"
-                className="no-underline text-[1.5rem] text-zinc-800 ml-[30px] font-semibold hover:text-red-700"
+                className="no-underline text-[1.3rem] text-zinc-800 ml-[30px] font-semibold hover:text-red-700"
               >
                 Home
               </a>
               <a
                 href="#about"
-                className="no-underline text-[1.5rem] text-zinc-800 ml-[30px] font-semibold hover:text-red-700"
+                className="no-underline text-[1.3rem] text-zinc-800 ml-[30px] font-semibold hover:text-red-700"
               >
                 About
               </a>
               <a
                 href="#pricing"
-                className="no-underline text-[1.5rem] text-zinc-800 ml-[30px] font-semibold hover:text-red-700"
+                className="no-underline text-[1.3rem] text-zinc-800 ml-[30px] font-semibold hover:text-red-700"
               >
                 Pricing
               </a>
@@ -133,23 +133,23 @@ function Header() {
         )}
       </div>
       <div className="flex w-[50%] items-center justify-end">
-        {screenWidth > 820 ? (
+        {screenWidth > 900 ? (
           <>
             <a
               href="/demo"
-              className="no-underline text-[1.5rem] text-zinc-800 mr-[30px] font-semibold hover:text-red-700"
+              className="no-underline text-[1.3rem] text-zinc-800 mr-[30px] font-semibold hover:text-red-700"
             >
               Demo
             </a>
             <a
               href="/login"
-              className="no-underline text-[1.5rem] text-zinc-800 mr-[30px] font-semibold hover:text-red-700"
+              className="no-underline text-[1.3rem] text-zinc-800 mr-[30px] font-semibold hover:text-red-700"
             >
               Login
             </a>
             <a
               href="/register"
-              className="no-underline text-[1.5rem] text-zinc-800 mr-[30px] font-semibold hover:text-red-700 "
+              className="no-underline text-[1.3rem] text-zinc-800 mr-[60px] font-semibold hover:text-red-700 "
             >
               Create Account
             </a>
