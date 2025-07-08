@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../slices/userSlice.tsx";
 import { setNewSupply, clearSupply } from "../slices/supplySlice.tsx";
 import "../styles/Dashboard.css";
-const api = process.env.REACT_APP_BACK_HOST || "http://localhost:10000";
+// const api = process.env.REACT_APP_BACK_HOST || "http://localhost:10000";
+const api = "http://localhost:10000";
 
 function Dashboard() {
   const [auth, setAuth] = useState(false);

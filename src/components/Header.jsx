@@ -13,9 +13,9 @@ function Header() {
     setHamburgerClicked(!hamburgerClicked);
   };
   return (
-    <header className="w-screen h-[80px] bg-slate-50 fixed flex flex-row border-b-zinc-300 border-b border-solid">
+    <header className="w-screen h-[80px] bg-slate-50 fixed flex flex-row border-b-zinc-300 border-b border-solid z-10">
       {hamburgerClicked === true ? (
-        <nav className="absolute mt-[80px] h-screen w-screen flex bg-red-50 flex-col items-center">
+        <nav className="fixed mt-[80px] h-screen w-screen flex bg-red-50 flex-col items-center">
           <div className="h-[60%] w-screen items-center flex flex-col">
             <div className="border-y-zinc-400 border-b border-solid w-[90%] pt-3 pb-3 flex group">
               <div className="w-[50%] flex ">
